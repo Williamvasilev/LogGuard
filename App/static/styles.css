@@ -1,0 +1,95 @@
+/* Styling for the banner */
+.banner {
+    background-color: #191616; /* Dark background color */
+    color: #fff; /* White text color */
+    padding: 20px; /* Add some padding */
+    text-align: center; /* Center the text */
+}
+
+/* Styling for the navbar */
+.navbar {
+    overflow: hidden; /* Hide overflow content */
+    background-color: #191616; /* Dark background color */
+}
+
+/* Style the buttons inside the navbar */
+.navbar button {
+    float: left; /* Float the buttons to the left */
+    display: block; /* Display the buttons as block elements */
+    color: #fff; /* White text color */
+    text-align: center; /* Center the text */
+    padding: 14px 20px; /* Add padding */
+    text-decoration: none; /* Remove underline */
+    font-size: 16px; /* Increase font size */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+/* Change color of buttons on hover */
+.navbar button:hover {
+    background-color: #ddd; /* Light gray background color */
+    color: #333; /* Dark text color */
+}
+
+/* Styles for body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333; /* Dark gray background color */
+    color: #fff; /* White text color */
+}
+
+/* Styles for headings */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+/* Styles for image */
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Styles for buttons */
+button, input[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for forms */
+form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Styles for links */
+a {
+    text-decoration: none;
+    color: #007bff;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Center-align content in the container */
+.container {
+    text-align: center;
+}
+

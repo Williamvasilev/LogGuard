@@ -4,16 +4,73 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Model Prediction Result</title>
+    <title>LogGuard Prediction Result</title>
+    <link rel="stylesheet" href="/static/result.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-    <h1>Model Prediction Result</h1>
-    
-    {% if incidents_html %}
-        <h2>Predicted Incidents</h2>
-        {{ incidents_html|safe }}
+    <div class="banner">
+        <h1>LogGuard Prediction Result</h1>
+    </div>
+
+    <div class="navbar">
+        <button onclick="location.href='/homepage.html';">Homepage</button>
+        <button onclick="location.href='/predict.html';">Predict</button>
+    </div>
+
+    {% if grouped_incidents %}
+        {% for content, incidents_html in grouped_incidents.items() %}
+            <h2 onclick="toggleIncidents('{{ content }}')">{{ content }}</h2>
+            <div id="{{ content }}" class="incidents">
+                {{ incidents_html|safe }}
+            </div>
+        {% endfor %}
     {% else %}
         <p>No incidents predicted.</p>
     {% endif %}
+
+    <canvas id="incidentPieChart" width="200" height="200"></canvas>
+
+    <script>
+        // Get the data for the pie chart (number of incidents vs non-incidents)
+        var incidents = {{ num_incidents }};
+        var nonIncidents = {{ num_logs }} - incidents;
+        
+        // Get the canvas element
+        var ctx = document.getElementById('incidentPieChart').getContext('2d');
+        
+        // Create the pie chart
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Incidents', 'Non-Incidents'],
+                datasets: [{
+                    data: [incidents, nonIncidents],
+                    backgroundColor: ['#ff6347', '#4169e1']
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Distribution of Incidents vs Non-Incidents'
+                },
+                aspectRatio: 2.5
+            }
+        });
+    </script>
+
+    <script>
+        // JavaScript function to toggle visibility of incidents
+        function toggleIncidents(contentId) {
+            var incidentsDiv = document.getElementById(contentId);
+            if (incidentsDiv.style.display === "none") {
+                incidentsDiv.style.display = "block";
+            } else {
+                incidentsDiv.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
+
