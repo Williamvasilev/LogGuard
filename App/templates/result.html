@@ -7,24 +7,40 @@
     <title>LogGuard Prediction Result</title>
     <link rel="stylesheet" href="/static/result.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function toggleIncidents(contentId) {
+            var incidentsDiv = document.getElementById(contentId);
+            if (incidentsDiv.style.display === "none") {
+                incidentsDiv.style.display = "block";
+            } else {
+                incidentsDiv.style.display = "none";
+            }
+        }
+    </script>
 </head>
 
 <body>
     <div class="banner">
         <h1>LogGuard Prediction Result</h1>
     </div>
-
+    
     <div class="navbar">
         <button onclick="location.href='/homepage.html';">Homepage</button>
         <button onclick="location.href='/predict.html';">Predict</button>
     </div>
 
+    <h2>To see all grouped incidents, click on text below.</h2>
+    
     {% if grouped_incidents %}
-        {% for content, incidents_html in grouped_incidents.items() %}
-            <h2 onclick="toggleIncidents('{{ content }}')">{{ content }}</h2>
-            <div id="{{ content }}" class="incidents">
-                {{ incidents_html|safe }}
-            </div>
+        {% for filename, grouped_content in grouped_incidents.items() %}
+            <h2>{{ filename }}</h2>
+            {% for content, incidents_html in grouped_content.items() %}
+                {% set unique_id = filename.replace('.', '_') + '_' + content.replace(' ', '_') %}
+                <h3 onclick="toggleIncidents('{{ unique_id }}')" style="cursor: pointer;">{{ content }}</h3>
+                <div id="{{ unique_id }}" class="incidents" style="display: none;">
+                    {{ incidents_html|safe }}
+                </div>
+            {% endfor %}
         {% endfor %}
     {% else %}
         <p>No incidents predicted.</p>
@@ -33,14 +49,11 @@
     <canvas id="incidentPieChart" width="200" height="200"></canvas>
 
     <script>
-        // Get the data for the pie chart (number of incidents vs non-incidents)
-        var incidents = {{ num_incidents }};
-        var nonIncidents = {{ num_logs }} - incidents;
+        var incidents = {{ total_incidents }};
+        var nonIncidents = {{ total_logs }} - incidents;
         
-        // Get the canvas element
         var ctx = document.getElementById('incidentPieChart').getContext('2d');
         
-        // Create the pie chart
         var myPieChart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -59,18 +72,5 @@
             }
         });
     </script>
-
-    <script>
-        // JavaScript function to toggle visibility of incidents
-        function toggleIncidents(contentId) {
-            var incidentsDiv = document.getElementById(contentId);
-            if (incidentsDiv.style.display === "none") {
-                incidentsDiv.style.display = "block";
-            } else {
-                incidentsDiv.style.display = "none";
-            }
-        }
-    </script>
 </body>
 </html>
-

@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import joblib
 import os
 import sqlite3
+from sklearn.preprocessing import OneHotEncoder
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -66,56 +67,59 @@ def predict_page():
 def predict():
     if request.method == 'POST':
         # Check if the post request has the file part
-        if 'csvFile' not in request.files:
+        if 'csvFiles' not in request.files:
             return render_template('index.html', error='No file part')
 
-        file = request.files['csvFile']
+        files = request.files.getlist('csvFiles')
 
-        # If the user does not select a file, submit an empty part without filename
-        if file.filename == '':
-            return render_template('index.html', error='No selected file')
+        grouped_incidents = {}
+        total_incidents = 0
+        total_logs = 0
 
-        # read csv file into dataframe
-        user_df = pd.read_csv(file)
+        for file in files:
+            # read csv file into dataframe
+            user_df = pd.read_csv(file)
 
-        user_df['Level'] = user_df['Level'].astype('category')
-        user_df['Component'] = user_df['Component'].astype('category')
+            user_df['Level'] = user_df['Level'].astype('category')
+            user_df['Component'] = user_df['Component'].astype('category')
 
-        user_df['Date'] = pd.to_datetime(user_df['Date'])
-        user_df['Time'] = pd.to_datetime(user_df['Time'])
+            user_df['Date'] = pd.to_datetime(user_df['Date'])
+            user_df['Time'] = pd.to_datetime(user_df['Time'])
 
-        user_df['Year'] = user_df['Date'].dt.year
-        user_df['Month'] = user_df['Date'].dt.month
-        user_df['Day'] = user_df['Date'].dt.day
-        user_df['Hour'] = user_df['Time'].dt.hour
-        user_df['Minute'] = user_df['Time'].dt.minute
+            user_df['Time'] = user_df['Time'].dt.time
+            
+            X_other_features = user_df[['Level', 'Component']]
+            text_column = user_df['Content']
 
-        user_df = user_df.drop(['Date', 'Time'], axis=1)
+            # One-hot encode the categorical features
+            encoder = OneHotEncoder()
+            X_other_features_encoded = encoder.fit_transform(X_other_features)
 
-        vectorizer = TfidfVectorizer()
-        X_text_vectorized = vectorizer.fit_transform(user_df['Content'])
+            # Load the vectorizer used during model training
+            vectorizer = joblib.load('vectorizer.pkl')
 
-        # Convert non-numeric columns in X_other_features to sparse matrix
-        X_other_features = csr_matrix(user_df[['Year', 'Month', 'Day', 'Hour', 'Minute']].values)
+            # Use the loaded vectorizer to transform new text data
+            X_text_vectorized = vectorizer.transform(text_column)
 
-        # Combine the vectorized text data with other features
-        X_combined = hstack([X_text_vectorized, X_other_features])
+            # Combine the vectorized text data with other features
+            X_combined = hstack([X_text_vectorized, X_other_features_encoded])
 
-        # Make the prediction
-        predictions = model.predict(X_combined)
+            # Make the prediction
+            predictions = model.predict(X_combined)
 
-        # Filter the DataFrame based on predictions
-        incidents_df = user_df[predictions == 1]
+            # Filter the DataFrame based on predictions
+            incidents_df = user_df[predictions == 1]
 
-        # Group incidents by their content and convert to dictionary
-        grouped_incidents = incidents_df.groupby('Content').apply(lambda x: x.to_html(index=False)).to_dict()
+            # Group incidents by their content and convert to dictionary
+            grouped_incidents[file.filename] = incidents_df.groupby('Content').apply(lambda x: x.to_html(index=False)).to_dict()
 
-        # Calculate number of incidents
-        num_incidents = len(incidents_df)
-        num_logs = len(user_df)
+            # Update total number of incidents and logs
+            total_incidents += len(incidents_df)
+            total_logs += len(user_df)
 
-        # Render the template with the grouped incidents
-        return render_template('result.html', grouped_incidents=grouped_incidents, num_incidents=num_incidents, num_logs=num_logs)
+        # Render the template with the grouped incidents and total counts
+        return render_template('result.html', grouped_incidents=grouped_incidents,
+                               total_incidents=total_incidents, total_logs=total_logs)
 
 @app.route('/signin')
 def signin():

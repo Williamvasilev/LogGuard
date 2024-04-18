@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>LogGuard Prediction</title>
-        <link rel="stylesheet" href="/static/styles.css">
-    </head>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogGuard Prediction</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
     <div class="banner">
-        <h1>LogGuard Prediciton</h1>
+        <h1>LogGuard Prediction</h1>
     </div>
 
     <div class="navbar">
         <button onclick="location.href='/homepage.html';">Homepage</button>
     </div>
 
-<body>
     <form method="post" action="/predict" enctype="multipart/form-data">
-        <label for="csvFile">Choose a CSV file:</label>
-        <input type="file" id="csvFile" name="csvFile" accept=".csv">
+        <label for="csvFiles">Choose CSV file(s):</label>
+        <input type="file" id="csvFiles" name="csvFiles" accept=".csv" multiple>
         <input type="submit" value="Predict">
     </form>
+
     {% if prediction %}
         <p>Prediction: {{ prediction }}</p>
     {% endif %}

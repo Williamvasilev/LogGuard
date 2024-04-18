@@ -2,10 +2,17 @@
 
 /* Styling for the banner */
 .banner {
-    background-color: #191616; /* Dark background color */
-    color: #fff; /* White text color */
-    padding: 20px; /* Add some padding */
-    text-align: center; /* Center the text */
+    background-color: #191616;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.logo {
+    position: absolute; /* Position the logo */
+    top: 10px; /* Adjust top position */
+    right: 10px; /* Adjust right position */
 }
 
 /* Styling for the navbar */
@@ -18,13 +25,13 @@
 .navbar button {
     float: left; /* Float the buttons to the left */
     display: block; /* Display the buttons as block elements */
-    color: #fff; /* White text color */
-    text-align: center; /* Center the text */
-    padding: 14px 20px; /* Add padding */
+    color: #fff;
+    text-align: center;
+    padding: 14px 20px;
     text-decoration: none; /* Remove underline */
-    font-size: 16px; /* Increase font size */
-    border: none; /* Remove border */
-    cursor: pointer; /* Change cursor to pointer */
+    font-size: 16px; 
+    border: none; 
+    cursor: pointer; 
 }
 
 /* Change color of buttons on hover */
@@ -41,7 +48,7 @@ body {
     color: #fff; /* White text color */
 }
 
-        /* Styles for headings */
+/* Styles for headings */
 h1 {
     text-align: center;
     margin-top: 20px;
@@ -50,9 +57,10 @@ h1 {
 h2 {
     margin-top: 20px;
     cursor: pointer; /* Add cursor pointer for clickable behavior */
+    color: red;
 }
 
-        /* Styles for links */
+/* Styles for links */
 a {
     text-decoration: none;
     color: #007bff;
@@ -64,12 +72,12 @@ a:hover {
     text-decoration: underline;
 }
 
-        /* Styles for incidents container */
+/* Styles for incidents container */
 .incidents {
     display: none; /* Hide incidents by default */
 }
 
-        /* Styles for incident rows */
+/* Styles for incident rows */
 .incident-row {
     background-color: #ffffff;
     padding: 10px;
@@ -109,3 +117,13 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Center all text elements */
+body, h1, h2, h3, p, input[type="submit"], a {
+    text-align: center;
+}
+
+/* Center the logs */
+.incidents {
+    margin: 0 auto;
+    width: 65%;
+}

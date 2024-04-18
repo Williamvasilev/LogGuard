@@ -1,34 +1,41 @@
 /* Styling for the banner */
 .banner {
-    background-color: #191616; /* Dark background color */
-    color: #fff; /* White text color */
-    padding: 20px; /* Add some padding */
-    text-align: center; /* Center the text */
+    background-color: #191616;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.logo {
+    position: absolute; /* Position the logo */
+    top: 10px; /* Adjust top position */
+    right: 10px; /* Adjust right position */
 }
 
 /* Styling for the navbar */
 .navbar {
-    overflow: hidden; /* Hide overflow content */
-    background-color: #191616; /* Dark background color */
+    overflow: hidden;
+    background-color: #191616;
 }
 
 /* Style the buttons inside the navbar */
 .navbar button {
-    float: left; /* Float the buttons to the left */
-    display: block; /* Display the buttons as block elements */
-    color: #fff; /* White text color */
-    text-align: center; /* Center the text */
-    padding: 14px 20px; /* Add padding */
-    text-decoration: none; /* Remove underline */
-    font-size: 16px; /* Increase font size */
-    border: none; /* Remove border */
-    cursor: pointer; /* Change cursor to pointer */
+    float: left;
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
 }
 
-/* Change color of buttons on hover */
+
 .navbar button:hover {
-    background-color: #ddd; /* Light gray background color */
-    color: #333; /* Dark text color */
+    background-color: #ddd;
+    color: #333;
 }
 
 /* Styles for body */
@@ -36,8 +43,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fff; /* Dark gray background color */
-    color: #333; /* White text color */
+    background-color: #fff;
+    color: #333;
 }
 
 /* Styles for headings */
@@ -86,4 +93,8 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+.container {
+    text-align: center;
 }
