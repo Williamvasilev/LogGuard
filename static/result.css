@@ -1,0 +1,145 @@
+
+
+/* Styling for the banner */
+.banner {
+    background: linear-gradient(to right, #8a2387, #e94057, #f27121);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.logo {
+    position: absolute; /* Position the logo */
+    top: 10px; /* Adjust top position */
+    right: 10px; /* Adjust right position */
+}
+
+/* Styling for the navbar */
+.navbar {
+    overflow: hidden; /* Hide overflow content */
+    background: linear-gradient(to right, #8a2387, #e94057, #f27121);
+}
+
+/* Style the buttons inside the navbar */
+.navbar button {
+    float: left; /* Float the buttons to the left */
+    display: block; /* Display the buttons as block elements */
+    color: #fff;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none; /* Remove underline */
+    font-size: 16px; 
+    border: none; 
+    cursor: pointer; 
+}
+
+/* Change color of buttons on hover */
+.navbar button:hover {
+    background-color: #ddd; /* Light gray background color */
+    color: #333; /* Dark text color */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333; /* Dark gray background color */
+    color: #fff; /* White text color */
+}
+
+/* Styles for headings */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+h2 {
+    margin-top: 20px;
+    color: red;
+}
+h3 {
+    margin-top: 20px;
+    cursor: pointer; 
+    color: white;
+    background-color: transparent; 
+    transition: background-color 0.3s; 
+    display: inline-block;
+}
+
+h3:hover {
+    background-color: red; 
+    transition: background-color 0.3s;
+}
+
+h3.selected {
+    background-color: red; 
+    transition: background-color 0.3s;
+}
+/* Styles for links */
+a {
+    text-decoration: none;
+    color: #007bff;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Styles for incidents container */
+.incidents {
+    display: none; /* Hide incidents by default */
+}
+
+/* Styles for incident rows */
+.incident-row {
+    background-color: #ffffff;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* Styles for buttons */
+button, input[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for forms */
+form {
+    text-align: left;
+    margin-top: 20px;
+}
+
+/* Styles for links */
+a {
+    text-decoration: none;
+    color: #007bff;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Center the logs */
+.incidents {
+    margin: 0 auto;
+    width: 65%;
+}
+
+.bar-chart {
+    width: 10px;
+    height: 25px;
+}

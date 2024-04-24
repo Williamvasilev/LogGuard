@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogGuard Prediction Result</title>
+    <link rel="stylesheet" href="/static/result.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function toggleIncidents(contentId, element) {
+    var incidentsDiv = document.getElementById(contentId);
+    if (incidentsDiv.style.display === "none") {
+        incidentsDiv.style.display = "block";
+        element.querySelector('.expand-sign').innerText = '- '; 
+    } else {
+        incidentsDiv.style.display = "none";
+        element.querySelector('.expand-sign').innerText = '+ '; 
+    }
+}
+
+        function renderBarChart(filename, incidents, nonIncidents) {
+            var ctx = document.getElementById(filename + '-barChart').getContext('2d');
+            
+            var myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Incidents', 'Non-Incidents'],
+                    datasets: [{
+                        label: 'Number of Incidents',
+                        data: [incidents, nonIncidents],
+                        backgroundColor: ['#ff6347', '#4169e1']
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Incidents vs Non-Incidents in ' + filename
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="banner">
+        <h1>LogGuard Prediction Result</h1>
+    </div>
+    
+    <div class="navbar">
+        <button onclick="location.href='/homepage.html';">Homepage</button>
+        <button onclick="location.href='/predict.html';">Predict</button>
+    </div>
+    
+    <h2>To see all grouped incidents, click on text below.</h2>
+    {% if grouped_incidents %}
+        {% for filename, grouped_content in grouped_incidents.items() %}
+            <h2>{{ filename }}</h2>
+            {% for content, incidents_html in grouped_content.items() %}
+    {% set unique_id = filename.replace('.', '_') + '_' + content.replace(' ', '_') %}
+    <h3 onclick="toggleIncidents('{{ unique_id }}', this);" style="cursor: pointer;">
+        <span class="expand-sign">+ </span>{{ content }}
+    </h3>
+    <div id="{{ unique_id }}" class="incidents" style="display: none;">
+        {{ incidents_html|safe }}
+    </div>
+{% endfor %}
+            <canvas id="{{ filename }}-barChart" class="bar-chart"></canvas>
+            <script>
+                renderBarChart('{{ filename }}', {{ total_incidents[filename] }}, {{ total_logs[filename] - total_incidents[filename] }});
+            </script>
+        {% endfor %}
+    {% else %}
+        <p>No incidents predicted.</p>
+    {% endif %}
+
+    <canvas id="incidentPieChart" width="200" height="200"></canvas>
+
+    <script>
+        var totalIncidentsData = [];
+        var totalLogsData = [];
+        var filenames = [];
+    
+        {% for filename, total_incidents_value in total_incidents.items() %}
+            totalIncidentsData.push({{ total_incidents_value }});
+            totalLogsData.push({{ total_logs[filename] }});
+            filenames.push('{{ filename }}');
+        {% endfor %}
+    
+        var ctx = document.getElementById('incidentPieChart').getContext('2d');
+    
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: filenames,
+                datasets: [{
+                    label: 'Total Incidents',
+                    data: totalIncidentsData,
+                    backgroundColor: ['#ff6347', '#4169e1', '#32cd32', '#ffa500', '#8a2be2'],
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Distribution of Incidents per File'
+                },
+                aspectRatio: 2.5
+            }
+        });
+    </script>
+</body>
+</html>

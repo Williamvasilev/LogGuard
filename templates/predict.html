@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogGuard Prediction</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="banner">
+        <h1>LogGuard Prediction</h1>
+    </div>
+
+    <div class="navbar">
+        <button onclick="location.href='/homepage.html';">Homepage</button>
+    </div>
+
+    <div id="drop-area" style="border: 1px dashed #ccc; padding: 20px; text-align: center; margin: 20px;">
+        <form class="my-form" method="post" action="/predict" enctype="multipart/form-data">
+            <p>Drag and drop CSV file(s) here or click to select</p>
+            <input type="file" id="csvFiles" name="csvFiles" accept=".csv" multiple style="display: none;" onchange="displayFileNames(this)">
+            <label for="csvFiles" style="cursor: pointer;">Choose File(s)</label>
+            <div id="file-names"></div>
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+
+    <script>
+        var dropArea = document.getElementById('drop-area');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropArea.classList.add('highlight');
+        }
+
+        function unhighlight(e) {
+            dropArea.classList.remove('highlight');
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            var dt = e.dataTransfer;
+            var files = dt.files;
+
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            document.getElementById('csvFiles').files = files;
+        }
+
+        function displayFileNames(input) {
+            const fileNamesDiv = document.getElementById('file-names');
+            fileNamesDiv.innerHTML = '';
+            if (input.files.length > 0) {
+                for (let i = 0; i < input.files.length; i++) {
+                    const fileName = input.files[i].name;
+                    const fileNameElement = document.createElement('p');
+                    fileNameElement.textContent = fileName;
+                    fileNamesDiv.appendChild(fileNameElement);
+                }
+            } else {
+                fileNamesDiv.textContent = 'No files chosen';
+            }
+        }
+    </script>
+
+    {% if prediction %}
+        <p>Prediction: {{ prediction }}</p>
+    {% endif %}
+    {% if error %}
+        <p>Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html>
